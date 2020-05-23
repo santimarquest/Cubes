@@ -6,8 +6,8 @@ que me permita hacer algunas validaciones (valor positivio del lado del cubo), y
 
 2) Uso de Task<T> para tratar de sacar provecho del paralelismo en los procesos de cáculo, presentando 2 opciones 
 (una simple con Task.Factory, otra con Task.Run, reflection, y concurrentBag)
-No he usado métodos asíncronos para no tener que cambiar la firma de las funciones, pero también se podría haber hecho esto, pudiendo usar de 
-esta manera usar el await Task.WhenAll para liberar el thread mientras se hacen los cálculos correspondientes.
+No he usado métodos asíncronos para no tener que cambiar la firma de las funciones, pero también se podría haber hecho esto, 
+pudiendo usar de esta manera usar el await Task.WhenAll para liberar el thread mientras se hacen los cálculos correspondientes.
 De hecho me he guiado por el nombre de las funciones (que incluyen 'parallel'), para desarrollarlas de esa manera.
 Si comparamos la versión Before y After, según el tiempo de los tests unitarios, es más rápìda la versión sin multithreading.
 Es normal, estamos hablando de tareas muy pequeñas en número y en tiempo de ejecución. Todo ello crea un overhead que
@@ -18,7 +18,8 @@ En este caso concreto no creo que fuera necesario el uso de mocks, aunque me ha 
 No conocía esta herramienta, y todavía le tengo que dar vueltas sobre su utilidad real. Yo siempre he usado Moq cuando he necesitado objectos Mock.
 
 4) He decidido mantener el tipo 'decimal' de todas las unidades, a pesar de que me ha dado algún problema en los DataTestMethod. Parece ser que 
-no se pueden poner números tipo decimal como parámetro, y he tenido que hacer conversiones de double a decimal. 
+no se pueden poner números tipo decimal como parámetro, y he tenido que hacer conversiones de double a decimal,
+para no tener que cambiar tampoco los tipos de los datos numéricos. 
 
 5) Intento que el mismo código sea autoexplicativo, y no suelo poner comentarios en el código. Esta vez, tratándose de un ejercicio, he abusado de los mismos,
 con el objetivo de tratar de explicar mi forma de pensar al ir haciendo el desarrollo.
@@ -37,7 +38,6 @@ No veo que en este caso tenga sentido, pero siempre es un tema a considerar en t
 tipo de cubos que supiéramos de antemano que aparecen muy frecuentemente en la aplicación.
 - Uso de herramientas de profiler (Miniprofiler) o Benchmarking, que permitan medir las mejoras o no de rendimiento 
 después de alguna refactorización. Los tests unitarios también pueden ser útiles para esto.
-
 
 En cualquier caso, si echas en falta algún patrón o desarrollo que esperabas encontrar en este ejercicio, 
 me puedes explicar cual es el enfoque que quieres darle y porqué crees que debería estar este patrón, y yo trataré de desarrollar tu idea.

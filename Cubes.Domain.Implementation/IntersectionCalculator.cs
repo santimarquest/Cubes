@@ -1,6 +1,7 @@
 ﻿using Cubes.Domain.Contracts;
 using Cubes.Domain.Contracts.Objects;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -68,23 +69,37 @@ namespace Cubes.Domain.Implementation
 
             // El método mostrado en la función anterior es más sencillo, más corto y más claro.
 
+            // En este ejemplo:
+            // 1) Se ejecutan en paralelo todos los cálculos de la función GetDimension
+            // 2) A medida que va acabando cada tarea de cálculo, se guarda el resultado de cada una de ellas 
+            // en una colección thread-safe ConcurrentBag
+            // 3) Finalmente, recorremos esta colección para obtener los parámetros en el orden que necesitamos para pasarlos
+            // al constructor de la clase ortoedro.
+
             var dimensions = typeof(Point).GetProperties();
-            var listResult = new List<(decimal, string)>();
+            var concurrentBag = new ConcurrentBag<(decimal, string)>();
+            var listTask = new List<Task<decimal>>();
 
             foreach (var item in dimensions)
             {
-                var task = Task.Run(() => GetDimension((decimal)GetPropValue(firstCube.Centre, item.Name), firstCube.EdgeSize, (decimal)GetPropValue(secondCube.Centre, item.Name), secondCube.EdgeSize));
-                
-                // Esto tiene que evitarse! , task.Result es bloqueante para este thread.
-                var tuple = (task.Result, item.Name);
-                listResult.Add(tuple);
+                var task = Task<decimal>.Factory.StartNew(() => GetDimension((decimal)GetPropValue(firstCube.Centre, item.Name), firstCube.EdgeSize, (decimal)GetPropValue(secondCube.Centre, item.Name), secondCube.EdgeSize));
+                listTask.Add(task);
+
+                // Al finalizar cada tarea de cálculo, guardamos el resultado de la tarea en una colección concurrente thread safe.
+                task.ContinueWith((antecedent) =>
+                    {
+                        // Necesario para respetar el orden de los parámetros del constructor para la clase ortoedro
+                        var tuple = (antecedent.Result, item.Name);
+                        concurrentBag.Add(tuple);
+                    });                    
             }
 
-            // Necesario para respetar el orden de los parámetros del constructor para la clase ortoedro
+            // Ejecución en paralelo de cada tarea de cálculo
+            var result = Task.WhenAll(listTask);
 
-            var width = listResult.Where(x => x.Item2 == "Abscissa").FirstOrDefault().Item1;
-            var length = listResult.Where(x => x.Item2 == "Ordinate").FirstOrDefault().Item1;
-            var depth = listResult.Where(x => x.Item2 == "Applicate").FirstOrDefault().Item1;
+            var width = concurrentBag.Where(x => x.Item2 == "Abscissa").FirstOrDefault().Item1;
+            var length = concurrentBag.Where(x => x.Item2 == "Ordinate").FirstOrDefault().Item1;
+            var depth = concurrentBag.Where(x => x.Item2 == "Applicate").FirstOrDefault().Item1;
 
             return new Ortoedro(width, length, depth);
         }

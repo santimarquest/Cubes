@@ -1,13 +1,18 @@
 En este ejercicio he incluido los siguientes conceptos:
 1) Simplificada versión del builder pattern (sin director ni clases abstractas), solo para dotar de mayor flexibilidad a la creación de cubos,
 que me permita hacer algunas validaciones (valor positivio del lado del cubo), y dar un aire más funcional y legible al código de creación de cubos.
-2) Uso de Task<T> para tratar de sacar provecho del paralelismo en los procesos de cáculo, presentando 2 opciones (una simple, otra con reflection)
+2) Uso de Task<T> para tratar de sacar provecho del paralelismo en los procesos de cáculo, presentando 2 opciones 
+(una simple con Task.Factory, otra con Task.Run y reflection)
+No he usado métodos asíncronos para no tener que cambiar la firma de las funciones, pero también se podría haber hecho esto, pudiendo usar de 
+esta manera usar el await Task.WhenAll para liberar el thread mientras se hacen los cálculos correspondientes.
 3) He hecho algunos cambios en los tests unitarios para tratar de usar el mismo test con varios casos de prueba, con el tag [DataTestMethod].
 En este caso concreto no creo que fuera necesario el uso de mocks, aunque me ha parecido interesante el uso de NMock con sus expectations.
 No conocía esta herramienta, y todavía le tengo que dar vueltas sobre su utilidad real. Yo siempre he usado Moq cuando he necesitado objectos Mock.
-4) Intento que el mismo código sea autoexplicativo, y no suelo poner comentarios en el código. Esta vez, tratándose de un ejercicio, he abusado de los mismos,
+4) He decidido mantener el tipo 'decimal' de todas las unidades, a pesar de que me ha dado algún problema en los DataTestMethod. Parece ser que 
+no se pueden poner números tipo decimal como parámetro, y he tenido que hacer conversiones de double a decimal. 
+5) Intento que el mismo código sea autoexplicativo, y no suelo poner comentarios en el código. Esta vez, tratándose de un ejercicio, he abusado de los mismos,
 con el objetivo de tratar de explicar mi forma de pensar al ir haciendo el desarrollo.
-5) Teniendo en cuenta que el ejercicio estaba pensado para realizarlo en una hora, he decidido dejarlo aquí, aunque se me ocurren posibles mejoras:
+6) Teniendo en cuenta que el ejercicio estaba pensado para realizarlo en una hora, he decidido dejarlo aquí, aunque se me ocurren posibles mejoras:
 - Hacer un UI más amigable (y con uso de ficheros de recursos para internacionalización).
 - Otro aspecto de la internacionalización sería el formato de los números en punto flotante, y ver como podemos usar las unidades de medida
 de cada cultura (cm? pulgadas? etc?)

@@ -11,6 +11,10 @@ namespace Cubes.Domain.Implementation
     {
         #region .: Public Methods :.
 
+        // Se podría cambiar esta firma por:     
+        // public asinc Task<bool> FindParallelCubeIntersection(Cube firstCube, Cube secondCube)
+        // lo que permitiría hacer  var result = await Task.WhenAll(task1, task2, task3); para liberar el thread mientras se estan realizando los cálculos
+        // También vale este comentario para la siguiente función CalculateParallelCubeIntersectionFigure(
         public bool FindParallelCubeIntersection(Cube firstCube, Cube secondCube)
         {
             // Una forma de ejecutar tareas en paralelo, esperar que acaben y obtener el resultado de las mismas
@@ -40,7 +44,7 @@ namespace Cubes.Domain.Implementation
             // tenemos la dificultad añadida de tener que respetar el orden de los parámetros para obtener con
             // seguridad el resultado final, no creo que valga la pena hacerlo de esta manera.
 
-            // El método mostrado en el paso anterior es mucho más  sencillo, más corto y más claro.
+            // El método mostrado en la función anterior es más sencillo, más corto y más claro.
 
             var dimensions = typeof(Point).GetProperties();
             var listTask = new List<Task<decimal>>();

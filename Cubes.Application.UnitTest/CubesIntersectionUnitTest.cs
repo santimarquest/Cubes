@@ -46,14 +46,9 @@ namespace Cubes.Application.UnitTest
                                                                        )
         {
             // En los parámetros no se puede poner el sufijo m de decimal
-            var cx1 = (decimal)x1;
-            var cy1 = (decimal)y1;
-            var cz1 = (decimal)z1;
-            var ce1 = (decimal)edge1;
-            var cx2 = (decimal)x2;
-            var cy2 = (decimal)y2;
-            var cz2 = (decimal)z2;
-            var ce2 = (decimal)edge2;
+            decimal cx1, cy1, cz1, ce1, cx2, cy2, cz2, ce2;
+            FromDoubleToDecimal(x1, y1, z1, edge1, x2, y2, z2, edge2, out cx1, out cy1, out cz1, out ce1, out cx2, out cy2, out cz2, out ce2);
+
             var volumeIntersection = (decimal)expectedvolume;
 
             #region .: Configure mocks :.
@@ -80,14 +75,10 @@ namespace Cubes.Application.UnitTest
         public void CubesIntersectionDoNotCollideTest(double x1, double y1, double z1, double edge1,
                                                                                  double x2, double y2, double z2, double edge2)
         {
-            var cx1 = (decimal)x1;
-            var cy1 = (decimal)y1;
-            var cz1 = (decimal)z1;
-            var ce1 = (decimal)edge1;
-            var cx2 = (decimal)x2;
-            var cy2 = (decimal)y2;
-            var cz2 = (decimal)z2;
-            var ce2 = (decimal)edge2;
+            // En los parámetros no se puede poner el sufijo m de decimal
+            decimal cx1, cy1, cz1, ce1, cx2, cy2, cz2, ce2;
+            FromDoubleToDecimal(x1, y1, z1, edge1, x2, y2, z2, edge2, out cx1, out cy1, out cz1, out ce1, out cx2, out cy2, out cz2, out ce2);
+
 
             #region .: Configure mocks :.
 
@@ -105,6 +96,19 @@ namespace Cubes.Application.UnitTest
             Assert.IsFalse(result.Item1, "Intersection should not have been found.");
             Assert.IsTrue(result.Item2 == 0, "Wrong volume.");
         }
+
+        private static void FromDoubleToDecimal(double x1, double y1, double z1, double edge1, double x2, double y2, double z2, double edge2, out decimal cx1, out decimal cy1, out decimal cz1, out decimal ce1, out decimal cx2, out decimal cy2, out decimal cz2, out decimal ce2)
+        {
+            cx1 = (decimal)x1;
+            cy1 = (decimal)y1;
+            cz1 = (decimal)z1;
+            ce1 = (decimal)edge1;
+            cx2 = (decimal)x2;
+            cy2 = (decimal)y2;
+            cz2 = (decimal)z2;
+            ce2 = (decimal)edge2;
+        }
+
 
         #endregion .: Tests :.
     }

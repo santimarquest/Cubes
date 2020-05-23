@@ -30,7 +30,8 @@ namespace Cubes.Presentation
             Console.Out.WriteLine("Write \"exit\" at any time to quit application.");
             while (!leave.Trim().ToLower().Equals("y"))
             {
-                InputDTO inputDTO = new InputDTO(); SetCubesInformationFromConsoleInput(inputDTO);
+                InputDTO inputDTO = new InputDTO(); 
+                SetCubesInformationFromConsoleInput(inputDTO);
                 Tuple<bool, decimal> result = ProcessInput(inputDTO);
 
                 if (result.Item1)

@@ -82,7 +82,7 @@ namespace Cubes.Domain.Implementation
 
             foreach (var item in dimensions)
             {
-                var task = Task<decimal>.Factory.StartNew(() => GetDimension((decimal)GetPropValue(firstCube.Centre, item.Name), firstCube.EdgeSize, (decimal)GetPropValue(secondCube.Centre, item.Name), secondCube.EdgeSize));
+                var task = Task<decimal>.Run(() => GetDimension((decimal)GetPropValue(firstCube.Centre, item.Name), firstCube.EdgeSize, (decimal)GetPropValue(secondCube.Centre, item.Name), secondCube.EdgeSize));
                 listTask.Add(task);
 
                 // Al finalizar cada tarea de cálculo, guardamos el resultado de la tarea en una colección concurrente thread safe.

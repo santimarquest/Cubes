@@ -28,15 +28,19 @@ namespace Cubes.Application.Implementation
 
         public Tuple<bool, decimal> GetCubesIntersection(Cube firstCube, Cube secondCube)
         {
-            decimal intersectionVolume = 0;
-            bool existsIntersection = _intersectionCalculator.FindParallelCubeIntersection(firstCube, secondCube);
+            var calculateVolumeIntersection = new CubeChainOfResponsability.CalculateVolumeIntersection();
+            var getIntersection = new CubeChainOfResponsability.GetIntersection(calculateVolumeIntersection);
 
-            if (existsIntersection)
-            {
-                intersectionVolume = _volumeCalculator.CalculateOrtoedroVolume(_intersectionCalculator.CalculateParallelCubeIntersectionFigure(firstCube, secondCube));
-            }
+            //var myObject = getIntersection.Handle(new CubeExtensionsChainOfResponsability.MyClass(_intersectionCalculator, firstCube, secondCube));
+            //var result = calculateVolumeIntersection.Handle(myObject);
 
-            return new Tuple<bool, decimal>(existsIntersection, intersectionVolume);
+            var result = getIntersection.Handle(new CubeChainOfResponsability.CubeHandlerParams(_intersectionCalculator, firstCube, secondCube));
+            // var result = calculateVolumeIntersection.Handle(myObject);
+
+            //var intersection = CubeExtensionsChainOfResponsability.GetIntersection(_intersectionCalculator, firstCube, secondCube);
+            //return (intersection, CubeExtensionsChainOfResponsability.CalculateVolumeIntersection(intersection, _intersectionCalculator, _volumeCalculator, firstCube, secondCube)).ToTuple();
+
+            return new Tuple<bool, decimal>(result.intersection, result.volume);
         }
 
         #endregion .: Public Methods :.

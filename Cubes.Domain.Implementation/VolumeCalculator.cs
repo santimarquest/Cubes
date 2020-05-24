@@ -12,6 +12,11 @@ namespace Cubes.Domain.Implementation
             return ortoedro.Width * ortoedro.Length * ortoedro.Depth;
         }
 
+        public decimal NoVolume(Ortoedro ortoedro)
+        {
+            return 0m;
+        }
+
         #endregion .: Public Methods :.
     }
 }

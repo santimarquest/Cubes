@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CubesIntersection.cs" />
+    <Compile Include="CubeExtensionsChainOfResponsability.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cubes.Application.Contracts\Cubes.Application.Contracts.csproj">
@@ -49,6 +50,10 @@
     <ProjectReference Include="..\Cubes.Domain.Contracts\Cubes.Domain.Contracts.csproj">
       <Project>{5D2FF3BF-9DA9-426E-885D-A0281BDAB749}</Project>
       <Name>Cubes.Domain.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cubes.Domain.Implementation\Cubes.Domain.Implementation.csproj">
+      <Project>{E052E6B8-4D9A-4A5F-BD67-377A08D9B1E1}</Project>
+      <Name>Cubes.Domain.Implementation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

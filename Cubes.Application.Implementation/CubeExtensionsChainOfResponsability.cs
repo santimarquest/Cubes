@@ -1,11 +1,5 @@
 ﻿using Cubes.Domain.Contracts;
 using Cubes.Domain.Contracts.Objects;
-using Cubes.Domain.Implementation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cubes.Application.Implementation
 {
@@ -14,16 +8,10 @@ namespace Cubes.Application.Implementation
         public class CubeHandlerParams
         { 
 
-            public CubeHandlerParams(IIntersectionCalculator intersectionCalculator, Cube firstCube, Cube secondCube)
+            public CubeHandlerParams(IIntersectionCalculator intersectionCalculator, 
+                                                       IVolumeCalculator volumeCalculator,
+                                                      Cube firstCube, Cube secondCube)
             {
-                this.intersectionCalculator = intersectionCalculator;
-                this.firstCube = firstCube;
-                this.secondCube = secondCube;
-            }
-
-            public CubeHandlerParams(bool intersection, IIntersectionCalculator intersectionCalculator, IVolumeCalculator volumeCalculator, Cube firstCube, Cube secondCube)
-            {
-                this.intersection = intersection;
                 this.intersectionCalculator = intersectionCalculator;
                 this.volumeCalculator = volumeCalculator;
                 this.firstCube = firstCube;
@@ -43,11 +31,9 @@ namespace Cubes.Application.Implementation
         {
             IHandler SetNext(IHandler handler);
 
-            CubeHandlerParams Handle(CubeHandlerParams myObject);
+            CubeHandlerParams Handle(CubeHandlerParams cubeHandlerParams);
         }
 
-        // The default chaining behavior can be implemented inside a base handler
-        // class.
         public abstract class AbstractHandler : IHandler
         {
             private IHandler _nextHandler;
@@ -55,67 +41,46 @@ namespace Cubes.Application.Implementation
             public IHandler SetNext(IHandler handler)
             {
                 this._nextHandler = handler;
-
-                // Returning a handler from here will let us link handlers in a
-                // convenient way like this:
-                // monkey.SetNext(squirrel).SetNext(dog);
                 return handler;
             }
 
-            public virtual CubeHandlerParams Handle(CubeHandlerParams myObject)
+            public virtual CubeHandlerParams Handle(CubeHandlerParams cubeHandlerParams)
             {
                 if (this._nextHandler != null)
                 {
-                    return this._nextHandler.Handle(myObject);
+                    return this._nextHandler.Handle(cubeHandlerParams);
                 }
                 else
                 {
-                    return myObject;
+                    return cubeHandlerParams;
                 }
             }
         }
 
        public class GetIntersection : AbstractHandler
         {
-            private CalculateVolumeIntersection calculateVolumeIntersection;
-
-            public GetIntersection ()
+            public override CubeHandlerParams Handle(CubeHandlerParams cubeHandlerParams)
             {
-                
-            }
-
-            public GetIntersection(CalculateVolumeIntersection calculateVolumeIntersection)
-            {
-                this.SetNext(calculateVolumeIntersection);
-            }
-
-            public override CubeHandlerParams Handle(CubeHandlerParams myObject)
-            {
-                myObject.intersection =  myObject.intersectionCalculator.FindParallelCubeIntersection(myObject.firstCube, myObject.secondCube);
-                if (myObject.intersection)
-                {
-                    myObject.volumeCalculator = new VolumeCalculator();
-                }
-                return base.Handle(myObject);
+                cubeHandlerParams.intersection =  cubeHandlerParams.intersectionCalculator.FindParallelCubeIntersection(cubeHandlerParams.firstCube, cubeHandlerParams.secondCube);
+                return base.Handle(cubeHandlerParams);
             }
         }
 
         public class CalculateVolumeIntersection : AbstractHandler
         {
-            private object p;
 
             public CalculateVolumeIntersection()
             {
                 this.SetNext(null);
             }
 
-            public override CubeHandlerParams Handle( CubeHandlerParams myObject)
+            public override CubeHandlerParams Handle( CubeHandlerParams cubeHandlerParams)
             {
-              myObject.volume = myObject.intersection
-              ? CalculateVolumeIntersectionTrue(myObject.intersectionCalculator, myObject.volumeCalculator, myObject.firstCube, myObject.secondCube)
+              cubeHandlerParams.volume = cubeHandlerParams.intersection
+              ? CalculateVolumeIntersectionTrue(cubeHandlerParams.intersectionCalculator, cubeHandlerParams.volumeCalculator, cubeHandlerParams.firstCube, cubeHandlerParams.secondCube)
               : CalculateVolumeIntersectionFalse();
 
-                return base.Handle(myObject);
+                return base.Handle(cubeHandlerParams);
             }
         }
 
@@ -131,15 +96,5 @@ namespace Cubes.Application.Implementation
         {
             return 0m;
         }
-
-        //public static decimal CalculateVolumeIntersection(bool intersection,
-        //                                                                                 IIntersectionCalculator intersectionCalculator,
-        //                                                                                 IVolumeCalculator volumeCalculator,
-        //                                                                                  Cube firstCube, Cube secondCube)
-        //{
-        //    return (intersection)
-        //        ? CalculateVolumeIntersectionTrue(intersectionCalculator, volumeCalculator, firstCube, secondCube)
-        //        : CalculateVolumeIntersectionFalse();
-        //}
     }
 }

@@ -4,7 +4,10 @@ En este ejercicio he incluido los siguientes conceptos:
 1) Simplificada versión del builder pattern (sin director ni clases abstractas), solo para dotar de mayor flexibilidad a la creación de cubos,
 que me permita hacer algunas validaciones (valor positivio del lado del cubo), y dar un aire más funcional y legible al código de creación de cubos.
 
-2) Uso de Task<T> para tratar de sacar provecho del paralelismo en los procesos de cáculo, presentando 2 opciones 
+2) Cálculo de si hay intersección o no y volumen de la intersección con un patrón Chain of Responsability de dos pasos. Tampoco 
+creo que en este caso fuera necesario, pero me pareció bien mostrar esta implementación.
+
+3) Uso de Task<T> para tratar de sacar provecho del paralelismo en los procesos de cáculo, presentando 2 opciones 
 (una simple con Task.Factory, otra con Task.Run, reflection, y concurrentBag)
 No he usado métodos asíncronos para no tener que cambiar la firma de las funciones, pero también se podría haber hecho esto, 
 pudiendo usar de esta manera usar el await Task.WhenAll para liberar el thread mientras se hacen los cálculos correspondientes.
@@ -13,18 +16,18 @@ Si comparamos la versión Before y After, según el tiempo de los tests unitarios,
 Es normal, estamos hablando de tareas muy pequeñas en número y en tiempo de ejecución. Todo ello crea un overhead que
 nos indica que para este caso concreto no sería necesario usar paralelismo, el beneficio lo veríamos para varias tareas más largas.
 
-3) He hecho algunos cambios en los tests unitarios para tratar de usar el mismo test con varios casos de prueba, con el tag [DataTestMethod].
+4) He hecho algunos cambios en los tests unitarios para tratar de usar el mismo test con varios casos de prueba, con el tag [DataTestMethod].
 En este caso concreto no creo que fuera necesario el uso de mocks, aunque me ha parecido interesante el uso de NMock con sus expectations.
 No conocía esta herramienta, y todavía le tengo que dar vueltas sobre su utilidad real. Yo siempre he usado Moq cuando he necesitado objectos Mock.
 
-4) He decidido mantener el tipo 'decimal' de todas las unidades, a pesar de que me ha dado algún problema en los DataTestMethod. Parece ser que 
+5) He decidido mantener el tipo 'decimal' de todas las unidades, a pesar de que me ha dado algún problema en los DataTestMethod. Parece ser que 
 no se pueden poner números tipo decimal como parámetro, y he tenido que hacer conversiones de double a decimal,
 para no tener que cambiar tampoco los tipos de los datos numéricos. 
 
-5) Intento que el mismo código sea autoexplicativo, y no suelo poner comentarios en el código. Esta vez, tratándose de un ejercicio, he abusado de los mismos,
+6) Intento que el mismo código sea autoexplicativo, y no suelo poner comentarios en el código. Esta vez, tratándose de un ejercicio, he abusado de los mismos,
 con el objetivo de tratar de explicar mi forma de pensar al ir haciendo el desarrollo.
 
-6) Teniendo en cuenta que el ejercicio estaba pensado para realizarlo en una hora, he decidido dejarlo aquí, aunque se me ocurren posibles mejoras:
+6) Posibles mejoras:
 - Hacer un UI más amigable (y con uso de ficheros de recursos para internacionalización).
 - Otro aspecto de la internacionalización sería el formato de los números en punto flotante, y ver como podemos usar las unidades de medida
 de cada cultura (cm? pulgadas? etc?)
@@ -56,7 +59,4 @@ Para acabar, en este ejercicio he tratado de mostrar mis intereses sobre:
 
 Para mi, estos son los pilares sobre los que trato de mejorar en el desarrollo de software.
 
-Te devuelvo un zip con mi solución, en la carpeta After. En la carpeta Before está el código inicial.
-
-Muchas gracias por revisar esta prueba!!.
 

@@ -28,18 +28,15 @@ namespace Cubes.Application.Implementation
 
         public Tuple<bool, decimal> GetCubesIntersection(Cube firstCube, Cube secondCube)
         {
+            // Definimos los pasos de un patrón Chain of Responsability, en este casos tenemos unca cade na de solo dos pasos.
+            var getIntersection = new CubeChainOfResponsability.GetIntersection();
             var calculateVolumeIntersection = new CubeChainOfResponsability.CalculateVolumeIntersection();
-            var getIntersection = new CubeChainOfResponsability.GetIntersection(calculateVolumeIntersection);
+              
+            // Definimos el orden de ejecución de los pasos en la cadena
+            getIntersection.SetNext(calculateVolumeIntersection);
 
-            //var myObject = getIntersection.Handle(new CubeExtensionsChainOfResponsability.MyClass(_intersectionCalculator, firstCube, secondCube));
-            //var result = calculateVolumeIntersection.Handle(myObject);
-
-            var result = getIntersection.Handle(new CubeChainOfResponsability.CubeHandlerParams(_intersectionCalculator, firstCube, secondCube));
-            // var result = calculateVolumeIntersection.Handle(myObject);
-
-            //var intersection = CubeExtensionsChainOfResponsability.GetIntersection(_intersectionCalculator, firstCube, secondCube);
-            //return (intersection, CubeExtensionsChainOfResponsability.CalculateVolumeIntersection(intersection, _intersectionCalculator, _volumeCalculator, firstCube, secondCube)).ToTuple();
-
+            // Lanzamos la ejecución del primer paso. Si no es el último paso, cada paso llama al siguiente.
+            var result = getIntersection.Handle(new CubeChainOfResponsability.CubeHandlerParams(_intersectionCalculator, _volumeCalculator,  firstCube, secondCube));
             return new Tuple<bool, decimal>(result.intersection, result.volume);
         }
 
